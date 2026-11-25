@@ -1,43 +1,46 @@
 /* Image Gallery — CodeAlpha Task 1
-   Theme: deep blue (dark navy background, bright blue accent) by default,
-   with a soft blue light mode. Toggle with the button in the top bar. */
+   Theme: ChatGPT grey with an amber accent by default (dark grey
+   background), with a white light mode. Same theme as the Portfolio
+   and Music Player. Toggle with the button in the top bar. */
 
 :root {
   --radius: 14px;
 }
 
 html[data-theme="dark"] {
-  --bg: #0a1128;
-  --bg-soft: #0e1830;
-  --surface: #16233f;
-  --surface-hover: #1d2f52;
-  --text: #eaf1fb;
-  --muted: #93a7c9;
-  --accent: #3b82f6;
-  --accent-strong: #38bdf8;
-  --accent-soft: rgba(59, 130, 246, 0.18);
+  --bg: #212121;
+  --bg-soft: #262626;
+  --surface: #2f2f2f;
+  --surface-hover: #3a3a3a;
+  --text: #ececec;
+  --muted: #b4b4b4;
+  --accent: #f59e0b;
+  --accent-strong: #f59e0b;
+  --accent-fill: #d97706;
+  --accent-soft: rgba(245, 158, 11, 0.18);
   --on-accent: #ffffff;
-  --border: rgba(96, 165, 250, 0.3);
-  --appbar-bg: rgba(10, 17, 40, 0.85);
-  --select-bg: #16233f;
-  --lightbox-bg: rgba(5, 8, 20, 0.96);
+  --border: rgba(255, 255, 255, 0.14);
+  --appbar-bg: rgba(23, 23, 23, 0.85);
+  --select-bg: #2f2f2f;
+  --lightbox-bg: rgba(15, 15, 15, 0.96);
 }
 
 html[data-theme="light"] {
-  --bg: #eef4ff;
-  --bg-soft: #f7faff;
-  --surface: #ffffff;
-  --surface-hover: #e8f0fe;
-  --text: #0f2447;
-  --muted: #5b7295;
-  --accent: #2563eb;
-  --accent-strong: #3b82f6;
-  --accent-soft: rgba(37, 99, 235, 0.12);
+  --bg: #ffffff;
+  --bg-soft: #f9f9f9;
+  --surface: #f9f9f9;
+  --surface-hover: #efefef;
+  --text: #0d0d0d;
+  --muted: #6e6e6e;
+  --accent: #d97706;
+  --accent-strong: #d97706;
+  --accent-fill: #b45309;
+  --accent-soft: rgba(217, 119, 6, 0.12);
   --on-accent: #ffffff;
-  --border: rgba(37, 99, 235, 0.3);
-  --appbar-bg: rgba(10, 17, 40, 0.9);
-  --select-bg: #ffffff;
-  --lightbox-bg: rgba(8, 14, 32, 0.96);
+  --border: rgba(0, 0, 0, 0.12);
+  --appbar-bg: rgba(255, 255, 255, 0.9);
+  --select-bg: #f9f9f9;
+  --lightbox-bg: rgba(15, 15, 15, 0.96);
 }
 
 * {
@@ -83,7 +86,7 @@ body {
   width: 2.1rem;
   height: 2.1rem;
   border-radius: 0.7rem;
-  background: var(--accent);
+  background: var(--accent-fill);
   color: var(--on-accent);
 }
 
@@ -92,7 +95,7 @@ body {
   font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: 0.3px;
-  color: #ffffff;
+  color: var(--text);
 }
 
 .theme-toggle {
@@ -138,7 +141,7 @@ body {
 }
 
 .icon-btn.open {
-  background: var(--accent);
+  background: var(--accent-fill);
   border-color: transparent;
   color: var(--on-accent);
 }
@@ -308,7 +311,7 @@ body {
 }
 
 .cat-card.active .cat-count {
-  background: var(--accent);
+  background: var(--accent-fill);
 }
 
 .showing {
@@ -490,7 +493,7 @@ body {
 }
 
 .lightbox-close:hover {
-  background: rgba(59, 130, 246, 0.5);
+  background: rgba(245, 158, 11, 0.5);
 }
 
 .lightbox-dots {

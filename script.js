@@ -1,5 +1,5 @@
 // Image Gallery — CodeAlpha Task 1
-// Features: category filters, photo effects, deep blue theme + light mode,
+// Features: category filters, photo effects, ChatGPT grey + amber theme,
 // lightbox with swipe/drag sliding (no arrow buttons), dot indicators,
 // keyboard navigation (arrows + Escape), click backdrop to close.
 
