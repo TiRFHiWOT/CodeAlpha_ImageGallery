@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — CodeAlpha Task 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- App-style top bar: logo + theme toggle, no big title -->
+  <header class="appbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.8" fill="currentColor" stroke="none"/><path d="M4.5 18.5 10 13l3 3.2 2.6-2.7L20.5 18.5"/></svg>
+      </span>
+      <span class="brand-name">Gallery</span>
+    </div>
+    <div class="appbar-actions">
+      <button class="icon-btn" id="effectsBtn" aria-label="Photo effects" aria-haspopup="true" aria-expanded="false" title="Photo effects">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Switch to light mode" title="Switch theme">
+        <span id="themeIcon" aria-hidden="true">&#9788;</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Photo effects live here now, hidden behind the sliders button -->
+  <div class="effects-panel" id="effectsPanel" hidden>
+    <p class="effects-title">Photo effect</p>
+    <div class="effects-options" role="group" aria-label="Photo effect">
+      <button class="effect-option active" data-effect="none">None</button>
+      <button class="effect-option" data-effect="grayscale">Black &amp; white</button>
+      <button class="effect-option" data-effect="sepia">Sepia</button>
+    </div>
+  </div>
+
+  <!-- Category pills with counts + photo effect -->
+  <div class="toolbar">
+    <div class="cat-strip" role="group" aria-label="Filter by category">
+      <button class="cat-card active" data-filter="all">
+        <span class="cat-collage" aria-hidden="true">
+          <img src="images/nature-fjord.jpg" alt="" />
+          <img src="images/city-snow.jpg" alt="" />
+          <img src="images/animal-pug.jpg" alt="" />
+          <img src="images/food-strawberries.jpg" alt="" />
+        </span>
+        <span class="cat-name">All</span>
+        <span class="cat-count">12</span>
+      </button>
+      <button class="cat-card" data-filter="nature">
+        <img class="cat-img" src="images/nature-fjord.jpg" alt="" />
+        <span class="cat-name">Nature</span>
+        <span class="cat-count">3</span>
+      </button>
+      <button class="cat-card" data-filter="city">
+        <img class="cat-img" src="images/city-snow.jpg" alt="" />
+        <span class="cat-name">City</span>
+        <span class="cat-count">3</span>
+      </button>
+      <button class="cat-card" data-filter="animals">
+        <img class="cat-img" src="images/animal-deer.jpg" alt="" />
+        <span class="cat-name">Animals</span>
+        <span class="cat-count">3</span>
+      </button>
+      <button class="cat-card" data-filter="food">
+        <img class="cat-img" src="images/food-grapes.jpg" alt="" />
+        <span class="cat-name">Food</span>
+        <span class="cat-count">3</span>
+      </button>
+    </div>
+  </div>
+  <p class="showing" id="showingLine">Showing 12 of 12 photos</p>
+
+  <main>
+    <div class="gallery" id="gallery">
+      <figure class="gallery-item" data-category="nature" tabindex="0">
+        <img src="images/nature-fjord.jpg" alt="Blue fjord between steep mountains" loading="lazy" />
+        <figcaption><span class="caption-title">Mountain Fjord</span><span class="tag">Nature</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="nature" tabindex="0">
+        <img src="images/nature-canyon.jpg" alt="Red rock canyon at golden hour" loading="lazy" />
+        <figcaption><span class="caption-title">Red Canyon</span><span class="tag">Nature</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="nature" tabindex="0">
+        <img src="images/nature-hills.jpg" alt="Green hills and a winding road under clouds" loading="lazy" />
+        <figcaption><span class="caption-title">Green Hills</span><span class="tag">Nature</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="city" tabindex="0">
+        <img src="images/city-snow.jpg" alt="Old building and car covered in snow" loading="lazy" />
+        <figcaption><span class="caption-title">Snowy Street</span><span class="tag">City</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="city" tabindex="0">
+        <img src="images/city-coast.jpg" alt="Boat crossing the sea with a city skyline at sunset" loading="lazy" />
+        <figcaption><span class="caption-title">Sunset Coast</span><span class="tag">City</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="city" tabindex="0">
+        <img src="images/city-car.jpg" alt="Inside a classic car" loading="lazy" />
+        <figcaption><span class="caption-title">Classic Car</span><span class="tag">City</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="animals" tabindex="0">
+        <img src="images/animal-deer.jpg" alt="A deer in a field at sunset" loading="lazy" />
+        <figcaption><span class="caption-title">Deer at Sunset</span><span class="tag">Animals</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="animals" tabindex="0">
+        <img src="images/animal-pug.jpg" alt="A pug wrapped in a blanket" loading="lazy" />
+        <figcaption><span class="caption-title">Pug in a Blanket</span><span class="tag">Animals</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="animals" tabindex="0">
+        <img src="images/animal-eagle.jpg" alt="An eagle flying with wide wings" loading="lazy" />
+        <figcaption><span class="caption-title">Flying Eagle</span><span class="tag">Animals</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="food" tabindex="0">
+        <img src="images/food-grapes.jpg" alt="Hands holding fresh dark grapes" loading="lazy" />
+        <figcaption><span class="caption-title">Fresh Grapes</span><span class="tag">Food</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="food" tabindex="0">
+        <img src="images/food-coffee.jpg" alt="A cup of hot coffee with steam" loading="lazy" />
+        <figcaption><span class="caption-title">Morning Coffee</span><span class="tag">Food</span></figcaption>
+      </figure>
+      <figure class="gallery-item" data-category="food" tabindex="0">
+        <img src="images/food-strawberries.jpg" alt="Fresh red strawberries" loading="lazy" />
+        <figcaption><span class="caption-title">Fresh Strawberries</span><span class="tag">Food</span></figcaption>
+      </figure>
+    </div>
+    <p class="empty-message" id="emptyMessage" hidden>No photos in this category.</p>
+  </main>
+
+  <!-- Lightbox: swipe/drag to slide, no arrow buttons -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <figure class="lightbox-content" id="lightboxContent">
+      <img id="lightboxImg" src="" alt="" draggable="false" />
+      <figcaption>
+        <span id="lightboxCaption"></span>
+        <span id="lightboxCounter"></span>
+      </figcaption>
+    </figure>
+    <div class="lightbox-dots" id="lightboxDots" role="tablist" aria-label="Choose photo"></div>
+  </div>
+
+  <footer class="footer">
+    <p>CodeAlpha — Frontend Development Internship, Task 1: Image Gallery</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

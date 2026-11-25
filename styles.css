@@ -1,0 +1,556 @@
+/* Image Gallery — CodeAlpha Task 1
+   Theme: deep blue (dark navy background, bright blue accent) by default,
+   with a soft blue light mode. Toggle with the button in the top bar. */
+
+:root {
+  --radius: 14px;
+}
+
+html[data-theme="dark"] {
+  --bg: #0a1128;
+  --bg-soft: #0e1830;
+  --surface: #16233f;
+  --surface-hover: #1d2f52;
+  --text: #eaf1fb;
+  --muted: #93a7c9;
+  --accent: #3b82f6;
+  --accent-strong: #38bdf8;
+  --accent-soft: rgba(59, 130, 246, 0.18);
+  --on-accent: #ffffff;
+  --border: rgba(96, 165, 250, 0.3);
+  --appbar-bg: rgba(10, 17, 40, 0.85);
+  --select-bg: #16233f;
+  --lightbox-bg: rgba(5, 8, 20, 0.96);
+}
+
+html[data-theme="light"] {
+  --bg: #eef4ff;
+  --bg-soft: #f7faff;
+  --surface: #ffffff;
+  --surface-hover: #e8f0fe;
+  --text: #0f2447;
+  --muted: #5b7295;
+  --accent: #2563eb;
+  --accent-strong: #3b82f6;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --on-accent: #ffffff;
+  --border: rgba(37, 99, 235, 0.3);
+  --appbar-bg: rgba(10, 17, 40, 0.9);
+  --select-bg: #ffffff;
+  --lightbox-bg: rgba(8, 14, 32, 0.96);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ---------- App bar (replaces the big title) ---------- */
+
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.2rem;
+  background: var(--appbar-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.7rem;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.brand-name {
+  font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+}
+
+.theme-toggle {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent-strong);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.theme-toggle:hover {
+  transform: rotate(15deg) scale(1.06);
+  background: var(--surface-hover);
+}
+
+.appbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-btn {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--surface-hover);
+}
+
+.icon-btn.open {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--on-accent);
+}
+
+/* ---------- Photo effects panel (behind the sliders button) ---------- */
+
+.effects-panel {
+  position: fixed;
+  top: 3.9rem;
+  right: 1rem;
+  z-index: 60;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.8rem;
+  animation: fadeIn 0.2s ease both;
+}
+
+.effects-panel[hidden] {
+  display: none;
+}
+
+.effects-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.55rem;
+}
+
+.effects-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.effect-option {
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  padding: 0.5rem 0.75rem;
+  border-radius: 9px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.effect-option:hover {
+  background: var(--surface-hover);
+}
+
+.effect-option.active {
+  background: var(--accent-soft);
+  border-color: var(--border);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+/* ---------- Toolbar: image category cards + effect ---------- */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.9rem 1rem 0.6rem;
+}
+
+.cat-strip {
+  display: flex;
+  gap: 0.7rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.1rem 0.4rem;
+  scrollbar-width: none;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cat-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 118px;
+  height: 76px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: var(--surface);
+  font-family: inherit;
+  text-align: left;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.cat-card .cat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.cat-card:hover .cat-img {
+  transform: scale(1.1);
+}
+
+.cat-collage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 100%;
+  height: 100%;
+}
+
+.cat-collage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cat-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 35%, rgba(0, 0, 0, 0.72));
+  pointer-events: none;
+}
+
+.cat-name {
+  position: absolute;
+  left: 0.55rem;
+  bottom: 0.45rem;
+  z-index: 2;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.cat-count {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+}
+
+.cat-card.active {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.cat-card.active .cat-count {
+  background: var(--accent);
+}
+
+.showing {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.35rem 1rem 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- Gallery grid ---------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem 2rem;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--surface);
+  aspect-ratio: 4 / 3;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  animation: fadeIn 0.4s ease both;
+}
+
+.gallery-item:hover,
+.gallery-item:focus-visible {
+  transform: translateY(-4px) scale(1.01);
+  outline: none;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease, filter 0.4s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.08);
+}
+
+.gallery-item figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2.2rem 0.9rem 0.7rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  color: #fff;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.gallery-item:hover figcaption,
+.gallery-item:focus-visible figcaption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.caption-title {
+  font-weight: 600;
+}
+
+.tag {
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.gallery-item.hidden {
+  display: none;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 1rem;
+}
+
+/* Photo effect filters (bonus) */
+.gallery.effect-grayscale img {
+  filter: grayscale(1);
+}
+
+.gallery.effect-sepia img {
+  filter: sepia(0.8);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Lightbox: swipe to slide, no arrow buttons ---------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: var(--lightbox-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  z-index: 100;
+  animation: fadeIn 0.25s ease both;
+  touch-action: pan-y;
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox-content {
+  max-width: min(90vw, 900px);
+  text-align: center;
+  will-change: transform, opacity;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lightbox-content.dragging {
+  cursor: grabbing;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 72vh;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.lightbox-content figcaption {
+  color: #f5ede3;
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 1rem;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1.8rem;
+  line-height: 1;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+.lightbox-dots {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.lightbox-dots .dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.lightbox-dots .dot.active {
+  background: var(--accent);
+  transform: scale(1.35);
+}
+
+/* Controls fade away so only the photo shows; tap the photo to bring
+   them back for a second. The close button always stays visible. */
+.lightbox-content figcaption,
+.lightbox-dots {
+  transition: opacity 0.3s ease;
+}
+
+.lightbox.ui-hidden .lightbox-content figcaption,
+.lightbox.ui-hidden .lightbox-dots {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  padding: 1rem 1rem 2rem;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 600px) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    padding-top: 0.9rem;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
